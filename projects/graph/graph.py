@@ -28,32 +28,56 @@ class Graph:
         """
         Get all neighbors (edges) of a vertex.
         """
-        return self.vertices[vertex_id]
+        if vertex_id in self.vertices:
+            return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-
         # create an empty Queue and add starting vertex to it
         # this will keep track of all next_to_visit_vertices
+        queue = Queue()
+        queue.enqueue(starting_vertex)
         # create an empty set to keep track of visited vertices
+        visited_vertex = set()
         # while the queue is not empty
+        while queue.size() > 0: #  q.que = [starting_vertex]
             # dequeue a vertex off the queue
-
+            vertex = queue.dequeue()
             # Print it
-
+            if vertex not in visited_vertex:
+                print(vertex) 
             # Add the vertex to our visited set
-
+                visited_vertex.add(vertex) # q.que = [starting_vertex]
             # Add all neighbors to the queue
-        pass  # TODO
+                for next_vertex in self.get_neighbors(vertex):
+                    queue.enqueue(next_vertex)
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
+        # create an empty stack and add the starting vertex
+        stack = Stack()
+        # add the starting vertex to the stack
+        stack.push(starting_vertex)
+        # create a set to keep track of visited vertices
+        visited = set()
+        # while the stack is not empty
+        while stack.size() > 0:
+            # remove a vertex from the stack
+            visited_vertex = stack.pop()
+            # print it
+            if visited_vertex not in visited:
+                print(visited_vertex)
+                # add the vertex to the visited set
+                visited.add(visited_vertex)
+                # add all the nieghbors to the stack
+                for next_vertex in self.get_neighbors(visited_vertex):
+                    stack.push(next_vertex)
         pass  # TODO
 
     def dft_recursive(self, starting_vertex):
@@ -71,7 +95,22 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        queue = Queue()
+        #push start of path into the queue
+        queue.enqueue([starting_vertex])
+        while queue.size() > 0:
+            # first path from queue
+            path = queue.dequeue()
+            # last vertex from the path
+            last_vertex = path[-1]
+            # path found
+            if last_vertex == destination_vertex:
+                return path
+            # enumerate all adjacent nodes, build a new path, and push into Q
+            for adjacent in self.get_neighbors(last_vertex):
+                new_path = list(path)
+                new_path.append(adjacent)
+                queue.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -79,7 +118,28 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+
+        path = []
+        stack = Stack()
+        # add the starting vertex to the stack
+        stack.push(starting_vertex)
+        # create a set to keep track of visited 
+        visited = set()
+
+        while stack.size() > 0:
+
+            vertex = stack.pop()
+            if vertex not in visited:
+                # add the visited to the set
+                visited.add(vertex)
+                # add the path to the list
+                path.append(vertex)
+                if vertex == destination_vertex:
+                    return path
+                # add the next vertex to the stack
+                for next_vertex in self.get_neighbors(vertex):
+                    stack.push(next_vertex)
+
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
